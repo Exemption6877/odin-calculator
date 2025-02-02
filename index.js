@@ -2,21 +2,23 @@ const numbers = document.querySelectorAll(".numbers");
 const operators = document.querySelectorAll(".operators");
 const equality = document.querySelector(".equality");
 
-let currentNumber = 0;
-let operator = "";
-let compute = false;
+let currentNumber = {
+  num: "",
+  operator: null,
+  compute: false,
+};
 
 numbers.forEach((button) => {
   button.addEventListener("click", () => {
-    currentNumber = parseInt(button.innerText);
-    console.log(currentNumber);
+    currentNumber.num += [parseInt(button.innerText)];
+    console.log(currentNumber.num);
   });
 });
 
 operators.forEach((button) => {
   button.addEventListener("click", () => {
-    operator = button.innerText;
-    console.log(operator);
+    currentNumber.operator = button.innerText;
+    console.log(currentNumber.operator);
   });
 });
 
