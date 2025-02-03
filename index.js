@@ -19,7 +19,7 @@ let userInput = {
 
 ac.addEventListener("click", () => {
   resetOutput();
-  pushOutput(userInput.first_num);
+  pushOutput();
 });
 
 negative.addEventListener("click", () => {
@@ -27,10 +27,10 @@ negative.addEventListener("click", () => {
 
   if (userInput.negative && !userInput.first_num.startsWith("-")) {
     userInput.first_num = "-" + userInput.first_num;
-    pushOutput(userInput.first_num);
+    pushOutput();
   } else if (!userInput.negative && userInput.first_num.startsWith("-")) {
     userInput.first_num = userInput.first_num.slice(1);
-    pushOutput(userInput.first_num);
+    pushOutput();
   }
 });
 
@@ -39,7 +39,7 @@ dot.addEventListener("click", () => {
     userInput.dot = true;
 
     userInput.first_num += ".";
-    pushOutput(userInput.first_num);
+    pushOutput();
   }
 });
 
@@ -47,11 +47,12 @@ numbers.forEach((button) => {
   button.addEventListener("click", () => {
     if (userInput.computed) {
       userInput.computed = false;
-      pushOutput(resetOutput());
+      resetOutput();
+      pushOutput();
     }
     userInput.first_num += button.innerText;
 
-    pushOutput(userInput.first_num);
+    pushOutput();
   });
 });
 
@@ -62,7 +63,7 @@ operators.forEach((button) => {
     userInput.first_num = "";
     userInput.dot = false;
     userInput.negative = false;
-    pushOutput(userInput.first_num);
+    pushOutput();
   });
 });
 
@@ -125,12 +126,12 @@ document.addEventListener("keydown", (event) => {
       userInput.first_num[userInput.first_num.length - 1] != "-"
     ) {
       userInput.first_num = userInput.first_num.slice(0, -1);
-      pushOutput(userInput.first_num);
+      pushOutput();
     }
   }
 });
 
-function pushOutput(info) {
+function pushOutput(info = userInput.first_num) {
   const result = document.createElement("p");
   if (document.querySelector(".result")) {
     output.removeChild(document.querySelector(".result"));
