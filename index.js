@@ -17,10 +17,6 @@ let userInput = {
   isFloat: false,
 };
 
-// const {inputNum, savedNum,operator,computed,}
-
-let currentNum = userInput.inputNum;
-
 acButton.addEventListener("click", () => {
   resetOutput();
 });
@@ -28,11 +24,11 @@ acButton.addEventListener("click", () => {
 negativeButton.addEventListener("click", () => {
   userInput.isNegative = !userInput.isNegative;
 
-  if (userInput.isNegative && !currentNum.startsWith("-")) {
-    currentNum = "-" + currentNum;
+  if (userInput.isNegative && !userInput.inputNum.startsWith("-")) {
+    userInput.inputNum = "-" + userInput.inputNum;
     pushOutput();
-  } else if (!userInput.isNegative && currentNum.startsWith("-")) {
-    currentNum = currentNum.slice(1);
+  } else if (!userInput.isNegative && userInput.inputNum.startsWith("-")) {
+    userInput.inputNum = userInput.inputNum.slice(1);
     pushOutput();
   }
 });
@@ -40,7 +36,7 @@ negativeButton.addEventListener("click", () => {
 dotButton.addEventListener("click", () => {
   if (!userInput.isFloat) {
     userInput.isFloat = true;
-    currentNum += ".";
+    userInput.inputNum += ".";
     pushOutput();
   }
 });
@@ -51,7 +47,7 @@ numberButtons.forEach((button) => {
       userInput.isComputed = false;
       resetOutput();
     }
-    currentNum += button.innerText;
+    userInput.inputNum += button.innerText;
 
     pushOutput();
   });
@@ -60,8 +56,8 @@ numberButtons.forEach((button) => {
 operatorButtons.forEach((button) => {
   button.addEventListener("click", () => {
     userInput.operator = button.innerText;
-    userInput.savedNum = currentNum;
-    currentNum = "";
+    userInput.savedNum = userInput.inputNum;
+    userInput.inputNum = "";
     userInput.isFloat = false;
     userInput.isNegative = false;
     pushOutput();
@@ -69,7 +65,7 @@ operatorButtons.forEach((button) => {
 });
 
 equalsButton.addEventListener("click", () => {
-  let num1 = parseFloat(currentNum);
+  let num1 = parseFloat(userInput.inputNum);
   let num2 = parseFloat(userInput.savedNum);
 
   if (userInput.savedNum.length > 0 && userInput.operator !== null) {
@@ -103,27 +99,30 @@ equalsButton.addEventListener("click", () => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Backspace") {
     if (
-      currentNum[currentNum.length - 1] != "." &&
-      currentNum[currentNum.length - 1] != "-"
+      userInput.inputNum[userInput.inputNum.length - 1] != "." &&
+      userInput.inputNum[userInput.inputNum.length - 1] != "-"
     ) {
-      currentNum = currentNum.slice(0, -1);
+      userInput.inputNum = userInput.inputNum.slice(0, -1);
       pushOutput();
     }
   }
 });
 
-function pushOutput(info = currentNum) {
+function pushOutput(info = userInput.inputNum) {
   const result = document.createElement("p");
-  if (document.querySelector(".result")) {
-    output.removeChild(document.querySelector(".result"));
+  const oldResult = document.querySelector(".result");
+
+  if (oldResult) {
+    output.removeChild(oldResult);
   }
+
   result.innerText = info;
   result.classList.add("result");
   output.appendChild(result);
 }
 
 function resetOutput() {
-  currentNum = "";
+  userInput.inputNum = "";
   userInput.savedNum = "";
   userInput.isFloat = false;
   userInput.operator = null;
