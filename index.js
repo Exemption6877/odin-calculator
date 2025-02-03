@@ -33,31 +33,36 @@ operators.forEach((button) => {
 
 equality.addEventListener("click", () => {
   if (userInput.second_num.length > 0 && userInput.operator !== null) {
-    let num1 = parseInt(userInput.first_num);
-    let num2 = parseInt(userInput.second_num);
+    let num1 = parseFloat(userInput.first_num);
+    let num2 = parseFloat(userInput.second_num);
 
     switch (userInput.operator) {
       case "+":
         userInput.computed = true;
-        return pushOutput(num2 + num1);
+        pushOutput(num2 + num1);
+        break;
       case "-":
         userInput.computed = true;
-        return pushOutput(num2 - num1);
+        pushOutput(num2 - num1);
+        break;
       case "*":
         userInput.computed = true;
-        return pushOutput(num2 * num1);
+        pushOutput(num2 * num1);
+        break;
       case "/":
         userInput.computed = true;
-
-        return num1 != 0 && num2 != 0
-          ? pushOutput(num2 / num1)
-          : pushOutput("3RR0R");
+        num1 != 0 && num2 != 0 ? pushOutput(num2 / num1) : pushOutput("3RR0R");
+        break;
       case "%":
         userInput.computed = true;
-
-        return pushOutput(num2 % num1);
+        pushOutput(num2 % num1);
+        break;
       case "AC":
         userInput.computed = true;
+        break;
+      default:
+        pushOutput("3RR0R");
+        break;
     }
   }
 });
