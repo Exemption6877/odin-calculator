@@ -62,6 +62,7 @@ operators.forEach((button) => {
     userInput.first_num = "";
     userInput.dot = false;
     userInput.negative = false;
+    pushOutput(userInput.first_num);
   });
 });
 
