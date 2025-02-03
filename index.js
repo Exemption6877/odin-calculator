@@ -3,6 +3,8 @@ const operators = document.querySelectorAll(".operators");
 const equality = document.querySelector(".equality");
 const output = document.querySelector(".output");
 const dot = document.querySelector(".dot");
+const negative = document.querySelector(".negative");
+const ac = document.querySelector(".ac");
 
 const ROUND = 3;
 
@@ -10,9 +12,27 @@ let userInput = {
   first_num: "",
   second_num: "",
   operator: null,
-  dot: false,
   computed: false,
+  negative: false,
+  dot: false,
 };
+
+ac.addEventListener("click", () => {
+  resetOutput();
+  pushOutput(userInput.first_num);
+});
+
+negative.addEventListener("click", () => {
+  userInput.negative = !userInput.negative;
+
+  if (userInput.negative && !userInput.first_num.startsWith("-")) {
+    userInput.first_num = "-" + userInput.first_num;
+    pushOutput(userInput.first_num);
+  } else if (!userInput.negative && userInput.first_num.startsWith("-")) {
+    userInput.first_num = userInput.first_num.slice(1);
+    pushOutput(userInput.first_num);
+  }
+});
 
 dot.addEventListener("click", () => {
   if (!userInput.dot) {
@@ -41,14 +61,15 @@ operators.forEach((button) => {
     userInput.second_num = userInput.first_num;
     userInput.first_num = "";
     userInput.dot = false;
+    userInput.negative = false;
   });
 });
 
 equality.addEventListener("click", () => {
-  if (userInput.second_num.length > 0 && userInput.operator !== null) {
-    let num1 = parseFloat(userInput.first_num);
-    let num2 = parseFloat(userInput.second_num);
+  let num1 = parseFloat(userInput.first_num);
+  let num2 = parseFloat(userInput.second_num);
 
+  if (userInput.second_num.length > 0 && userInput.operator !== null) {
     switch (userInput.operator) {
       case "+":
         userInput.computed = true;
@@ -86,13 +107,13 @@ equality.addEventListener("click", () => {
         break;
       case "%":
         userInput.computed = true;
-        Number.isInteger(num2 % num1)
-          ? num2 % num1
-          : Number((num2 % num1).toFixed(ROUND));
+        pushOutput(
+          Number.isInteger((num2 / 100) * num1)
+            ? (num2 / 100) * num1
+            : Number(((num2 / 100) * num1).toFixed(ROUND))
+        );
         break;
-      case "AC":
-        userInput.computed = true;
-        break;
+
       default:
         pushOutput("3RR0R");
         break;
@@ -117,4 +138,5 @@ function resetOutput() {
   userInput.second_num = "";
   userInput.dot = false;
   userInput.operator = null;
+  userInput.negative = false;
 }
