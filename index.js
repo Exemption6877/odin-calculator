@@ -114,13 +114,7 @@ equality.addEventListener("click", () => {
             : Number(((num2 / 100) * num1).toFixed(ROUND))
         );
         break;
-
-      default:
-        pushOutput("3RR0R");
-        break;
     }
-  } else {
-    pushOutput("3RR0R");
   }
 });
 
