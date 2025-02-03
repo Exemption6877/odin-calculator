@@ -1,45 +1,78 @@
 const numbers = document.querySelectorAll(".numbers");
 const operators = document.querySelectorAll(".operators");
 const equality = document.querySelector(".equality");
+const output = document.querySelector(".output");
 
-let currentNumber = {
+let userInput = {
   first_num: "",
   second_num: "",
   operator: null,
-  compute: false,
+  computed: false,
 };
 
 numbers.forEach((button) => {
   button.addEventListener("click", () => {
-    currentNumber.first_num += button.innerText;
-    console.log(currentNumber.first_num);
+    if (userInput.computed) {
+      userInput.computed = false;
+      pushOutput(resetOutput());
+    }
+    userInput.first_num += button.innerText;
+    pushOutput(userInput.first_num);
+    console.log(userInput.first_num);
   });
 });
 
 operators.forEach((button) => {
   button.addEventListener("click", () => {
-    currentNumber.operator = button.innerText;
-    currentNumber.second_num = currentNumber.first_num;
-    currentNumber.first_num = "";
-    console.log(currentNumber.operator);
+    userInput.operator = button.innerText;
+    userInput.second_num = userInput.first_num;
+    userInput.first_num = "";
+    console.log(userInput.operator);
   });
 });
 
 equality.addEventListener("click", () => {
-  if (currentNumber.second_num.length > 0 && currentNumber.operator !== null) {
-    let num1 = parseInt(currentNumber.first_num);
-    let num2 = parseInt(currentNumber.second_num);
+  if (userInput.second_num.length > 0 && userInput.operator !== null) {
+    let num1 = parseInt(userInput.first_num);
+    let num2 = parseInt(userInput.second_num);
 
-    // reformat to switch
-    if (currentNumber.operator == "+") {
-      addCalculator(num1, num2);
+    switch (userInput.operator) {
+      case "+":
+        userInput.computed = true;
+        return pushOutput(num2 + num1);
+      case "-":
+        userInput.computed = true;
+        return pushOutput(num2 - num1);
+      case "*":
+        userInput.computed = true;
+        return pushOutput(num2 * num1);
+      case "/":
+        userInput.computed = true;
+
+        return num1 != 0 && num2 != 0
+          ? pushOutput(num2 / num1)
+          : pushOutput("3RR0R");
+      case "%":
+        userInput.computed = true;
+
+        return pushOutput(num2 % num1);
+      case "AC":
+        userInput.computed = true;
     }
-  } else {
-    console.log("123");
   }
 });
 
-function addCalculator(x, y) {
-  console.log(x + y);
-  return x + y;
+function pushOutput(info) {
+  const result = document.createElement("p");
+  if (document.querySelector(".result")) {
+    output.removeChild(document.querySelector(".result"));
+  }
+  result.innerText = info;
+  result.classList.add("result");
+  output.appendChild(result);
+}
+
+function resetOutput() {
+  userInput.first_num = "";
+  userInput.second_num = "";
 }
