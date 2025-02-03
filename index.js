@@ -2,13 +2,26 @@ const numbers = document.querySelectorAll(".numbers");
 const operators = document.querySelectorAll(".operators");
 const equality = document.querySelector(".equality");
 const output = document.querySelector(".output");
+const dot = document.querySelector(".dot");
+
+const ROUND = 3;
 
 let userInput = {
   first_num: "",
   second_num: "",
   operator: null,
+  dot: false,
   computed: false,
 };
+
+dot.addEventListener("click", () => {
+  if (!userInput.dot) {
+    userInput.dot = true;
+
+    userInput.first_num += dot.innerText;
+    pushOutput(userInput.first_num);
+  }
+});
 
 numbers.forEach((button) => {
   button.addEventListener("click", () => {
@@ -17,8 +30,8 @@ numbers.forEach((button) => {
       pushOutput(resetOutput());
     }
     userInput.first_num += button.innerText;
+
     pushOutput(userInput.first_num);
-    console.log(userInput.first_num);
   });
 });
 
@@ -27,7 +40,7 @@ operators.forEach((button) => {
     userInput.operator = button.innerText;
     userInput.second_num = userInput.first_num;
     userInput.first_num = "";
-    console.log(userInput.operator);
+    userInput.dot = false;
   });
 });
 
@@ -39,23 +52,43 @@ equality.addEventListener("click", () => {
     switch (userInput.operator) {
       case "+":
         userInput.computed = true;
-        pushOutput(num2 + num1);
+        pushOutput(
+          Number.isInteger(num2 + num1)
+            ? num2 + num1
+            : Number((num2 + num1).toFixed(ROUND))
+        );
         break;
       case "-":
         userInput.computed = true;
-        pushOutput(num2 - num1);
+        pushOutput(
+          Number.isInteger(num2 - num1)
+            ? num2 - num1
+            : Number((num2 - num1).toFixed(ROUND))
+        );
         break;
       case "*":
         userInput.computed = true;
-        pushOutput(num2 * num1);
+        pushOutput(
+          Number.isInteger(num2 * num1)
+            ? num2 * num1
+            : Number((num2 * num1).toFixed(ROUND))
+        );
         break;
       case "/":
         userInput.computed = true;
-        num1 != 0 && num2 != 0 ? pushOutput(num2 / num1) : pushOutput("3RR0R");
+        num1 != 0 && num2 != 0
+          ? pushOutput(
+              Number.isInteger(num2 / num1)
+                ? num2 / num1
+                : Number((num2 / num1).toFixed(ROUND))
+            )
+          : pushOutput("3RR0R");
         break;
       case "%":
         userInput.computed = true;
-        pushOutput(num2 % num1);
+        Number.isInteger(num2 % num1)
+          ? num2 % num1
+          : Number((num2 % num1).toFixed(ROUND));
         break;
       case "AC":
         userInput.computed = true;
@@ -64,6 +97,8 @@ equality.addEventListener("click", () => {
         pushOutput("3RR0R");
         break;
     }
+  } else {
+    pushOutput("3RR0R");
   }
 });
 
@@ -80,4 +115,6 @@ function pushOutput(info) {
 function resetOutput() {
   userInput.first_num = "";
   userInput.second_num = "";
+  userInput.dot = false;
+  userInput.operator = null;
 }
