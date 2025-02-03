@@ -126,8 +126,13 @@ equality.addEventListener("click", () => {
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Backspace") {
-    userInput.first_num = userInput.first_num.slice(0, -1);
-    pushOutput(userInput.first_num);
+    if (
+      userInput.first_num[userInput.first_num.length - 1] != "." &&
+      userInput.first_num[userInput.first_num.length - 1] != "-"
+    ) {
+      userInput.first_num = userInput.first_num.slice(0, -1);
+      pushOutput(userInput.first_num);
+    }
   }
 });
 
