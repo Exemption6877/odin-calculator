@@ -9,13 +9,15 @@ const ac = document.querySelector(".ac");
 const ROUND = 3;
 
 let userInput = {
-  first_num: "",
-  second_num: "",
+  inputNum: "",
+  savedNum: "",
   operator: null,
   computed: false,
   negative: false,
   dot: false,
 };
+
+let currentNum = userInput.inputNum;
 
 ac.addEventListener("click", () => {
   resetOutput();
@@ -25,11 +27,11 @@ ac.addEventListener("click", () => {
 negative.addEventListener("click", () => {
   userInput.negative = !userInput.negative;
 
-  if (userInput.negative && !userInput.first_num.startsWith("-")) {
-    userInput.first_num = "-" + userInput.first_num;
+  if (userInput.negative && !currentNum.startsWith("-")) {
+    currentNum = "-" + currentNum;
     pushOutput();
-  } else if (!userInput.negative && userInput.first_num.startsWith("-")) {
-    userInput.first_num = userInput.first_num.slice(1);
+  } else if (!userInput.negative && currentNum.startsWith("-")) {
+    currentNum = currentNum.slice(1);
     pushOutput();
   }
 });
@@ -38,7 +40,7 @@ dot.addEventListener("click", () => {
   if (!userInput.dot) {
     userInput.dot = true;
 
-    userInput.first_num += ".";
+    currentNum += ".";
     pushOutput();
   }
 });
@@ -50,7 +52,7 @@ numbers.forEach((button) => {
       resetOutput();
       pushOutput();
     }
-    userInput.first_num += button.innerText;
+    currentNum += button.innerText;
 
     pushOutput();
   });
@@ -59,8 +61,8 @@ numbers.forEach((button) => {
 operators.forEach((button) => {
   button.addEventListener("click", () => {
     userInput.operator = button.innerText;
-    userInput.second_num = userInput.first_num;
-    userInput.first_num = "";
+    userInput.savedNum = currentNum;
+    currentNum = "";
     userInput.dot = false;
     userInput.negative = false;
     pushOutput();
@@ -68,10 +70,10 @@ operators.forEach((button) => {
 });
 
 equality.addEventListener("click", () => {
-  let num1 = parseFloat(userInput.first_num);
-  let num2 = parseFloat(userInput.second_num);
+  let num1 = parseFloat(currentNum);
+  let num2 = parseFloat(userInput.savedNum);
 
-  if (userInput.second_num.length > 0 && userInput.operator !== null) {
+  if (userInput.savedNum.length > 0 && userInput.operator !== null) {
     switch (userInput.operator) {
       case "+":
         userInput.computed = true;
@@ -122,16 +124,16 @@ equality.addEventListener("click", () => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Backspace") {
     if (
-      userInput.first_num[userInput.first_num.length - 1] != "." &&
-      userInput.first_num[userInput.first_num.length - 1] != "-"
+      currentNum[currentNum.length - 1] != "." &&
+      currentNum[currentNum.length - 1] != "-"
     ) {
-      userInput.first_num = userInput.first_num.slice(0, -1);
+      currentNum = currentNum.slice(0, -1);
       pushOutput();
     }
   }
 });
 
-function pushOutput(info = userInput.first_num) {
+function pushOutput(info = currentNum) {
   const result = document.createElement("p");
   if (document.querySelector(".result")) {
     output.removeChild(document.querySelector(".result"));
@@ -142,8 +144,8 @@ function pushOutput(info = userInput.first_num) {
 }
 
 function resetOutput() {
-  userInput.first_num = "";
-  userInput.second_num = "";
+  currentNum = "";
+  userInput.savedNum = "";
   userInput.dot = false;
   userInput.operator = null;
   userInput.negative = false;
