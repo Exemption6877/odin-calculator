@@ -38,7 +38,7 @@ dot.addEventListener("click", () => {
   if (!userInput.dot) {
     userInput.dot = true;
 
-    userInput.first_num += dot.innerText;
+    userInput.first_num += "-";
     pushOutput(userInput.first_num);
   }
 });
@@ -153,3 +153,7 @@ function resetOutput() {
   userInput.operator = null;
   userInput.negative = false;
 }
+
+// Just realized that everything would be much easier
+// if I've used array to store number inputs and "-", ".".
+// Bruh.
