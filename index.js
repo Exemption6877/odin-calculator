@@ -1,5 +1,5 @@
-const numbers = document.querySelectorAll(".numbers");
-const operators = document.querySelectorAll(".operators");
+const numberButtons = document.querySelectorAll(".numbers");
+const operatorButtons = document.querySelectorAll(".operators");
 const equality = document.querySelector(".equality");
 const output = document.querySelector(".output");
 const dot = document.querySelector(".dot");
@@ -12,45 +12,44 @@ let userInput = {
   inputNum: "",
   savedNum: "",
   operator: null,
-  computed: false,
-  negative: false,
-  dot: false,
+  isComputed: false,
+  isNegative: false,
+  isFloat: false,
 };
+
+// const {inputNum, savedNum,operator,computed,}
 
 let currentNum = userInput.inputNum;
 
 ac.addEventListener("click", () => {
   resetOutput();
-  pushOutput();
 });
 
 negative.addEventListener("click", () => {
-  userInput.negative = !userInput.negative;
+  userInput.isNegative = !userInput.isNegative;
 
-  if (userInput.negative && !currentNum.startsWith("-")) {
+  if (userInput.isNegative && !currentNum.startsWith("-")) {
     currentNum = "-" + currentNum;
     pushOutput();
-  } else if (!userInput.negative && currentNum.startsWith("-")) {
+  } else if (!userInput.isNegative && currentNum.startsWith("-")) {
     currentNum = currentNum.slice(1);
     pushOutput();
   }
 });
 
 dot.addEventListener("click", () => {
-  if (!userInput.dot) {
-    userInput.dot = true;
-
+  if (!userInput.isFloat) {
+    userInput.isFloat = true;
     currentNum += ".";
     pushOutput();
   }
 });
 
-numbers.forEach((button) => {
+numberButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    if (userInput.computed) {
-      userInput.computed = false;
+    if (userInput.isComputed) {
+      userInput.isComputed = false;
       resetOutput();
-      pushOutput();
     }
     currentNum += button.innerText;
 
@@ -58,13 +57,13 @@ numbers.forEach((button) => {
   });
 });
 
-operators.forEach((button) => {
+operatorButtons.forEach((button) => {
   button.addEventListener("click", () => {
     userInput.operator = button.innerText;
     userInput.savedNum = currentNum;
     currentNum = "";
-    userInput.dot = false;
-    userInput.negative = false;
+    userInput.isFloat = false;
+    userInput.isNegative = false;
     pushOutput();
   });
 });
@@ -76,49 +75,29 @@ equality.addEventListener("click", () => {
   if (userInput.savedNum.length > 0 && userInput.operator !== null) {
     switch (userInput.operator) {
       case "+":
-        userInput.computed = true;
-        pushOutput(
-          Number.isInteger(num2 + num1)
-            ? num2 + num1
-            : Number((num2 + num1).toFixed(ROUND))
-        );
+        pushOutput(roundCheck(num2 + num1));
         break;
+
       case "-":
-        userInput.computed = true;
-        pushOutput(
-          Number.isInteger(num2 - num1)
-            ? num2 - num1
-            : Number((num2 - num1).toFixed(ROUND))
-        );
+        pushOutput(roundCheck(num2 - num1));
         break;
+
       case "*":
-        userInput.computed = true;
-        pushOutput(
-          Number.isInteger(num2 * num1)
-            ? num2 * num1
-            : Number((num2 * num1).toFixed(ROUND))
-        );
+        pushOutput(roundCheck(num2 * num1));
         break;
+
       case "/":
-        userInput.computed = true;
-        num1 != 0 && num2 != 0
-          ? pushOutput(
-              Number.isInteger(num2 / num1)
-                ? num2 / num1
-                : Number((num2 / num1).toFixed(ROUND))
-            )
+        num1 !== 0 && num2 !== 0
+          ? pushOutput(roundCheck(num2 / num1))
           : pushOutput("3RR0R");
         break;
+
       case "%":
-        userInput.computed = true;
-        pushOutput(
-          Number.isInteger((num2 / 100) * num1)
-            ? (num2 / 100) * num1
-            : Number(((num2 / 100) * num1).toFixed(ROUND))
-        );
+        pushOutput(roundCheck((num2 / 100) * num1));
         break;
     }
   }
+  userInput.isComputed = true;
 });
 
 document.addEventListener("keydown", (event) => {
@@ -146,9 +125,14 @@ function pushOutput(info = currentNum) {
 function resetOutput() {
   currentNum = "";
   userInput.savedNum = "";
-  userInput.dot = false;
+  userInput.isFloat = false;
   userInput.operator = null;
-  userInput.negative = false;
+  userInput.isNegative = false;
+  pushOutput();
+}
+
+function roundCheck(arg) {
+  return Number.isInteger(arg) ? arg : Number(arg.toFixed(ROUND));
 }
 
 // Just realized that everything would be much easier
