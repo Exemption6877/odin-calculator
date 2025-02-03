@@ -1,10 +1,10 @@
 const numberButtons = document.querySelectorAll(".numbers");
 const operatorButtons = document.querySelectorAll(".operators");
-const equality = document.querySelector(".equality");
+const equalsButton = document.querySelector(".equals");
 const output = document.querySelector(".output");
-const dot = document.querySelector(".dot");
-const negative = document.querySelector(".negative");
-const ac = document.querySelector(".ac");
+const dotButton = document.querySelector(".dot");
+const negativeButton = document.querySelector(".negative");
+const acButton = document.querySelector(".ac");
 
 const ROUND = 3;
 
@@ -21,11 +21,11 @@ let userInput = {
 
 let currentNum = userInput.inputNum;
 
-ac.addEventListener("click", () => {
+acButton.addEventListener("click", () => {
   resetOutput();
 });
 
-negative.addEventListener("click", () => {
+negativeButton.addEventListener("click", () => {
   userInput.isNegative = !userInput.isNegative;
 
   if (userInput.isNegative && !currentNum.startsWith("-")) {
@@ -37,7 +37,7 @@ negative.addEventListener("click", () => {
   }
 });
 
-dot.addEventListener("click", () => {
+dotButton.addEventListener("click", () => {
   if (!userInput.isFloat) {
     userInput.isFloat = true;
     currentNum += ".";
@@ -68,7 +68,7 @@ operatorButtons.forEach((button) => {
   });
 });
 
-equality.addEventListener("click", () => {
+equalsButton.addEventListener("click", () => {
   let num1 = parseFloat(currentNum);
   let num2 = parseFloat(userInput.savedNum);
 
