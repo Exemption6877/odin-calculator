@@ -38,7 +38,7 @@ dot.addEventListener("click", () => {
   if (!userInput.dot) {
     userInput.dot = true;
 
-    userInput.first_num += "-";
+    userInput.first_num += ".";
     pushOutput(userInput.first_num);
   }
 });
