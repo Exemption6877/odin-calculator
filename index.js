@@ -124,6 +124,13 @@ equality.addEventListener("click", () => {
   }
 });
 
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Backspace") {
+    userInput.first_num = userInput.first_num.slice(0, -1);
+    pushOutput(userInput.first_num);
+  }
+});
+
 function pushOutput(info) {
   const result = document.createElement("p");
   if (document.querySelector(".result")) {
